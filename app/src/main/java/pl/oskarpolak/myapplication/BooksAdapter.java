@@ -1,6 +1,7 @@
 package pl.oskarpolak.myapplication;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by OskarPraca on 2017-01-10.
@@ -45,17 +49,36 @@ public class BooksAdapter extends BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        convertView = inflater.inflate(R.layout.custom_book_list_row, parent, false);
 
-        TextView textTitle = (TextView) convertView.findViewById(R.id.textViewTitle);
-        TextView textAuthor = (TextView) convertView.findViewById(R.id.textViewAuthor);
-        TextView textPages = (TextView) convertView.findViewById(R.id.textViewPages);
+        ViewHolder viewHolder;
+        if(convertView != null){
+            viewHolder = (ViewHolder) convertView.getTag();
+        }else {
+            convertView = inflater.inflate(R.layout.custom_book_list_row, parent, false);
+            viewHolder = new ViewHolder(convertView);
+            convertView.setTag(viewHolder);
+        }
 
-        textTitle.setText(data.get(position).getTitle());
-        textAuthor.setText(data.get(position).getAuthor());
-        textPages.setText("Ilość stron: " + data.get(position).getPages());
+        viewHolder.textTitle.setText(data.get(position).getTitle());
+        viewHolder.textAuthor.setText(data.get(position).getAuthor());
+        viewHolder.textPages.setText("Ilość stron: " + data.get(position).getPages());
 
 
         return convertView;
     }
+
+     class ViewHolder {
+
+         @BindView(R.id.textViewTitle)
+         TextView textTitle;
+         @BindView(R.id.textViewAuthor)
+         TextView textAuthor;
+         @BindView(R.id.textViewPages)
+         TextView textPages;
+
+          public ViewHolder(View v){
+              ButterKnife.bind(this, v);
+          }
+
+     }
 }
